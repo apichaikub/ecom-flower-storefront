@@ -1,5 +1,5 @@
 <template>
-    <div class="container-input">
+    <div :class="['container-input', { transparent }]">
         <input
             type="text"
             v-bind="$attrs"
@@ -14,6 +14,7 @@ export default {
 
     props: {
         value: [String],
+        transparent: Boolean,
     },
 
     data() {
@@ -40,6 +41,20 @@ export default {
 <style lang="scss" scoped>
 .container-input {
     display: flex;
+
+    &.transparent input {
+        background: transparent;
+        padding: 4px 0;
+        border: none;
+        border-bottom: solid 1px #fff;
+        border-radius: 0;
+        color: #624848;
+
+        &::placeholder {
+            color: #624848;
+            opacity: 0.5;
+        }
+    }
 
     input {
         flex: 1;

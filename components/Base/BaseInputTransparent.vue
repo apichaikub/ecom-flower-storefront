@@ -2,7 +2,7 @@
     <BaseInput
         v-bind="$attrs"
         v-model="input"
-        class="custom-input-transparent"
+        transparent
     />
 </template>
 
@@ -38,22 +38,3 @@ export default {
     },
 }
 </script>
-
-<style lang="scss" scoped>
-.custom-input-transparent {
-
-    &::v-deep input {
-        background: transparent;
-        padding: 4px 0;
-        border: none;
-        border-bottom: solid 1px #fff;
-        border-radius: 0;
-        color: #624848;
-
-        &::placeholder {
-            color: #624848;
-            opacity: 0.5;
-        }
-    }
-}
-</style>
