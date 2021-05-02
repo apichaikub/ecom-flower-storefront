@@ -35,7 +35,7 @@ export default {
                 {
                     icon: 'images/progressbar/cart.png',
                     label: 'สั่งซื้อ',
-                    active: false,
+                    active: true,
                 },
                 {
                     icon: 'images/progressbar/paid.png',
