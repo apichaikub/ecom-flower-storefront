@@ -115,7 +115,6 @@ export default {
             }
 
             .banners {
-                flex: 1;
                 display: flex;
             }
         }
