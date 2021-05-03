@@ -1,5 +1,5 @@
 <template>
-    <div class="container-adjust-flower">
+    <div :class="['container-adjust-flower', { 'edit-mode': !preview }, {'preview-mode': preview}]">
         <div class="head">
             <p class="name">
                 A298 - อินทรา
@@ -17,13 +17,23 @@
                     :form.sync="form"
                 />
             </div>
+            <div class="canvas" @click="togglePreview">
+                <canvas ref="canvas"></canvas>
+            </div>
         </div>
         <div class="footer">
-            <div class="preview-btn">
-                <span>
-                    ตัวอย่างป้ายพวงหรีด
-                </span>
-                <BaseIcon name="search" height="16" />
+            <div class="preview-btn" @click="togglePreview">
+                <template v-if="!preview">
+                    <span>
+                        ตัวอย่างป้ายพวงหรีด
+                    </span>
+                    <BaseIcon name="search" height="16" />
+                </template>
+                <template v-else>
+                    <span>
+                        แก้ไขป้ายพวงหรีด
+                    </span>
+                </template>
             </div>
         </div>
     </div>
@@ -42,16 +52,132 @@ export default {
     data() {
         return {
             form: null,
+            resources: {
+                images: {
+                    // wreath: 'https://i.imgur.com/hKJUGuW.jpg',
+                    wreath: 'https://i.imgur.com/QxL3Vwz.png',
+                    artboard: 'https://i.imgur.com/7OTXbhi.png',
+                    upload: 'https://i.imgur.com/3rp5P8q.png',
+                },
+            },
+            assets: {
+                images: {},
+            },
+            preview: false,
         }
     },
 
     watch: {
         form:  {
             handler: function() {
+                this.drawCanvas(this.assets, this.form);
                 this.$emit('update:form', this.form);
             },
             deep: true,
         }
+    },
+
+    mounted() {
+        this.loadAssets(this.resources, (results) => {
+            this.assets.images = results.images
+            this.drawCanvas(this.assets, this.form)
+        })
+    },
+
+    methods: {
+        togglePreview() {
+            this.preview = !this.preview
+        },
+        async loadAssets(resources, callback) {
+            callback(await (async () => {
+                const data = {
+                    images: {},
+                }
+                for(const key of Object.keys(resources.images)) {
+                    const image = resources.images[key]
+                    data.images[key] = await this.loadImage(image)
+                }
+                return data
+            })())
+        },
+        loadImage(src) {
+            return new Promise((resolve) => {
+                const img = new Image()
+                img.onload = () => {
+                    resolve(img)
+                }
+                img.src = src
+            })
+        },
+        async drawCanvas(assets, _form) {
+            const canvas = this.$refs.canvas
+            const ctx = canvas.getContext('2d')
+            const form = {
+                base64Image: _form && _form.base64Image
+                    ? await this.loadImage(_form.base64Image)
+                    : assets.images.upload,
+                line1: _form && _form.line1
+                    ? _form.line1
+                    : 'ข้อความบรรทัดที่ 1',
+                line2: _form && _form.line2
+                    ? _form.line2
+                    : 'ข้อความบรรทัดที่ 2',
+            }
+            const position = {
+                artboard: {
+                    x: 0,
+                    y: 120,
+                    w: 300,
+                    h: 60,
+                },
+                logo: {
+                    w: 40,
+                    h: 40,
+                },
+            }
+
+            canvas.width = 300
+            canvas.height = 360
+
+            ctx.drawImage(
+                assets.images.wreath,
+                0,
+                0,
+                300,
+                360,
+            )
+
+            ctx.drawImage(
+                assets.images.artboard,
+                position.artboard.x,
+                position.artboard.y,
+                position.artboard.w,
+                position.artboard.h,
+            )
+
+            ctx.drawImage(
+                form.base64Image,
+                position.artboard.x + 50,
+                position.artboard.y + ((60 / 2) - (40 / 2)),
+                position.logo.w,
+                position.logo.h,
+            )
+
+            ctx.font = '14px Kanit'
+            ctx.textBaseline = 'top'
+
+            ctx.fillText(
+                form.line1,
+                position.artboard.x + 100,
+                position.artboard.y + 15,
+            )
+
+            ctx.fillText(
+                form.line2,
+                position.artboard.x + 100,
+                position.artboard.y + 35,
+            )
+        },
     },
 }
 </script>
@@ -60,6 +186,23 @@ export default {
 .container-adjust-flower {
     display: flex;
     flex-direction: column;
+
+    &.edit-mode {
+        .canvas {
+            visibility: hidden;
+            transform: scale(0);
+            position: absolute;
+            top: -1000px;
+            left: -1000px;
+        }
+    }
+
+    &.preview-mode {
+        .background-image,
+        .form-upload-image {
+            display: none;
+        }
+    }
 
     .head {
         .name {
@@ -89,6 +232,10 @@ export default {
             top: calc(50% - 40px);
             left: 50%;
             transform: translate(-50%, -50%);
+        }
+
+        .canvas {
+            cursor: pointer;
         }
     }
 
