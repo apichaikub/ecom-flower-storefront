@@ -31,7 +31,7 @@
                     <FormShipTo
                         :form.sync="form.shipTo"
                     />
-                    <BaseButton text="ถัดไป" class="next-btn" />
+                    <BaseButton text="ถัดไป" class="next-btn" @click="onClickNext"/>
                 </div>
             </div>
         </div>
@@ -72,6 +72,12 @@ export default {
             },
             deep: true,
         }
+    },
+
+    methods: {
+        onClickNext() {
+            this.$emit('submit')
+        },
     },
 }
 </script>

@@ -1,7 +1,8 @@
 <template>
-  <div>
-    <OrderFlower/>
-  </div>
+  <OrderFlower
+    :form.sync="form"
+    @submit="handleSubmit"
+  />
 </template>
 
 <script>
@@ -14,8 +15,14 @@ export default {
 
   data() {
     return {
-      
+      form: null,
     }
+  },
+
+  methods: {
+    handleSubmit() {
+      alert(JSON.stringify(this.form))
+    },
   },
 }
 </script>

@@ -2,7 +2,7 @@
     <div class="container-order-flower">
         <StepProgressbar :items="steps" />
         <Breadcrumb :items="breadcrumbs" />
-        <FormOrder :form.sync="form" />
+        <FormOrder :form.sync="form" @submit="handleSubmit" />
     </div>
 </template>
 
@@ -45,6 +45,21 @@ export default {
             ],
             breadcrumbs: ['หน้าหลัก', 'เลือกพวกหรีด', 'ชื่อสินค้า', 'ข้อมูลการจัดสั่ง'],
         }
+    },
+
+    watch: {
+        form:  {
+            handler: function() {
+                this.$emit('update:form', this.form);
+            },
+            deep: true,
+        }
+    },
+
+    methods: {
+        handleSubmit() {
+            this.$emit('submit')
+        },
     },
 }
 </script>
