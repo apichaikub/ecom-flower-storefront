@@ -70,7 +70,6 @@ export default {
         margin-top: 8px;
 
         &::v-deep input {
-            text-align: center;
             font-size: 12px;
         }
     }
