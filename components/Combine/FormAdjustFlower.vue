@@ -17,8 +17,9 @@
                     :form.sync="form"
                 />
             </div>
-            <div class="canvas" @click="togglePreview">
+            <div class="canvas" @click="exportImage">
                 <canvas ref="canvas"></canvas>
+                <span>(คลิกที่รูปภาพเพื่อดาวน์โหลด)</span>
             </div>
         </div>
         <div class="footer">
@@ -106,6 +107,7 @@ export default {
                 img.onload = () => {
                     resolve(img)
                 }
+                img.crossOrigin = 'anonymous'
                 img.src = src
             })
         },
@@ -178,6 +180,13 @@ export default {
                 position.artboard.y + 35,
             )
         },
+        exportImage() {
+            const mimeType = 'image/png'
+            const canvas = this.$refs.canvas
+            const base64Image = canvas.toDataURL(mimeType)
+            const imageUri = base64Image.replace(mimeType, "image/octet-stream")
+            window.location = imageUri
+        },
     },
 }
 </script>
@@ -235,7 +244,12 @@ export default {
         }
 
         .canvas {
+            text-align: center;
             cursor: pointer;
+
+            span {
+                font-size: 11px;
+            }
         }
     }
 
