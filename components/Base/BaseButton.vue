@@ -4,6 +4,7 @@
         
         
 
+
     </button>
 </template>
 
@@ -13,7 +14,8 @@ export default {
         text: String,
         
         
-        
+
+
     }
 }
 </script>
