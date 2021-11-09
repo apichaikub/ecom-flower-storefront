@@ -3,6 +3,8 @@
         <slot>{{ text }}</slot>
         
         
+
+
     </button>
 </template>
 
@@ -12,6 +14,8 @@ export default {
         text: String,
         
         
+
+
     }
 }
 </script>
