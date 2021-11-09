@@ -2,6 +2,7 @@
     <button v-bind="$attrs" v-on="$listeners" class="btn">
         <slot>{{ text }}</slot>
         
+        
     </button>
 </template>
 
