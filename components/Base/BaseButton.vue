@@ -3,6 +3,7 @@
         <slot>{{ text }}</slot>
 
 
+
     </button>
 </template>
 
@@ -11,6 +12,7 @@ export default {
     props: {
         text: String,
         
+
 
 }
 }
