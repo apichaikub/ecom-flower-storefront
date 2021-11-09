@@ -11,11 +11,16 @@ import OrderFlower from "@/components/Assemble/OrderFlower.vue"
 export default {
   components: {
     OrderFlower,
+
+
+
+    
   },
 
   data() {
     return {
       form: null,
+      
     }
   },
 
